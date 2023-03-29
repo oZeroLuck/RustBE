@@ -1,7 +1,13 @@
+mod api;
+mod models;
+mod repository;
+
 #[macro_use] extern crate rocket;
 
 use rocket::http::Status;
 use rocket::serde::json::Json;
+
+use api::user_api::*;
 
 #[get("/")]
 fn index() -> Result<Json<String>, Status> {
@@ -11,5 +17,7 @@ fn index() -> Result<Json<String>, Status> {
 #[launch]
 fn rocket() -> _ {
     rocket::build()
-        .mount("/rusty-be", routes![index])
+        .mount(
+            "/rusty-be",
+            routes![index, get_user, create_user])
 }
