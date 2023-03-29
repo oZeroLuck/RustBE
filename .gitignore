@@ -2,3 +2,4 @@
 cargo.log
 .idea
 rust_be.iml
+Cargo.lock

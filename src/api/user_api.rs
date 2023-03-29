@@ -2,8 +2,19 @@ use rocket::serde::json::Json;
 use crate::models::user_model::User;
 use rocket::http::Status;
 
-#[get("/user/<id>")]
-pub fn get_user(id: i32) -> Result<Json<User>, Status> {
+#[utoipa::path(
+    tag = "User",
+    context_path = "/rusty-be/user",
+    params(
+        ("id" = u32, Path, description = "User id")
+    ),
+    responses(
+        (status = 200, description = "Get user by uid", body = User),
+        (status = 400, description = "Uid not valid")
+    )
+)]
+#[get("/<id>")]
+pub fn get_user(id: u32) -> Result<Json<User>, Status> {
     let user = User {
         id: Some(1),
         name: "Marco".to_string(),
@@ -18,7 +29,15 @@ pub fn get_user(id: i32) -> Result<Json<User>, Status> {
     }
 }
 
-#[post("/user", data = "<new_user>")]
+#[utoipa::path(
+    tag = "User",
+    context_path = "/rusty-be/user",
+    request_body = User,
+    responses(
+        (status = 200, description = "Created user", body = User)
+    )
+)]
+#[post("/", data = "<new_user>")]
 pub fn create_user(new_user: Json<User>) -> Result<Json<User>, Status> {
     let created = User {
         id: None,
